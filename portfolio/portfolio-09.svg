@@ -1,17 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6fbff"/><stop offset="0.48" stop-color="#e7f5ff"/><stop offset="1" stop-color="#092a4a"/></linearGradient>
-    <linearGradient id="b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#092a4a"/><stop offset="1" stop-color="#176fc1"/></linearGradient>
-  </defs>
-  <rect width="1200" height="800" fill="url(#g)"/>
-  <circle cx="1030" cy="120" r="150" fill="#176fc1" opacity="0.18"/>
-  <circle cx="120" cy="690" r="220" fill="#22b8c9" opacity="0.18"/>
-  <path d="M0 620 C220 520 370 680 570 585 C745 505 875 585 1200 455 L1200 800 L0 800 Z" fill="#092a4a" opacity="0.96"/>
-  <path d="M150 470 h900 a54 54 0 0 1 54 54 v0 a54 54 0 0 1 -54 54 H150 a54 54 0 0 1 -54 -54 v0 a54 54 0 0 1 54 -54 Z" fill="#fff" opacity="0.82"/>
-  <text x="600" y="250" font-family="Inter, Arial, sans-serif" text-anchor="middle" font-size="58" font-weight="900" fill="#092a4a">BLUEPEAK CLEANING CO.</text>
-  <text x="600" y="335" font-family="Inter, Arial, sans-serif" text-anchor="middle" font-size="84" font-weight="900" fill="#176fc1">PORTFOLIO 09</text>
-  <text x="600" y="535" font-family="Inter, Arial, sans-serif" text-anchor="middle" font-size="54" font-weight="900" fill="#092a4a">BEDROOM CARPETS</text>
-  <text x="600" y="605" font-family="Inter, Arial, sans-serif" text-anchor="middle" font-size="34" font-weight="700" fill="#31506a">Comfort spaces</text>
-  <rect x="400" y="670" width="400" height="52" rx="26" fill="url(#b)"/>
-  <text x="600" y="706" font-family="Inter, Arial, sans-serif" text-anchor="middle" font-size="24" font-weight="800" fill="#fff">Replace with real project photo</text>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#edf8ff"/><stop offset="1" stop-color="#cfeaff"/></linearGradient><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#003b84"/><stop offset="1" stop-color="#1688ef"/></linearGradient></defs>
+<rect width="1200" height="800" fill="url(#g)"/>
+<circle cx="995" cy="150" r="180" fill="#1688ef" opacity=".12"/>
+<circle cx="150" cy="670" r="220" fill="#003b84" opacity=".10"/>
+<path d="M0 600 C200 500 350 650 540 560 C760 455 880 520 1200 390 L1200 800 L0 800 Z" fill="#0a4f9f" opacity=".18"/>
+<rect x="105" y="130" width="990" height="540" rx="42" fill="white" stroke="#d8e7f3" stroke-width="4"/>
+<circle cx="250" cy="310" r="84" fill="url(#b)"/>
+<path d="M220 340h70a22 22 0 0 0 0-44h-42" fill="none" stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M218 340V250a26 26 0 0 1 52 0v80" fill="none" stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="390" y="305" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#092a4a">Bedroom Carpet Cleaning</text>
+<text x="390" y="372" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#1688ef">Comfortable Living Areas</text>
+<text x="390" y="445" font-family="Arial, sans-serif" font-size="30" fill="#506981">BluePeak Cleaning Co.</text>
+<text x="390" y="495" font-family="Arial, sans-serif" font-size="26" fill="#64748b">Replace this image with your real portfolio photo.</text>
 </svg>
