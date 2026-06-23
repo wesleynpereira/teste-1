@@ -11,3 +11,52 @@ header{
   border-bottom:1px solid rgba(15,45,77,.10) !important;
   box-shadow:0 8px 28px rgba(11,45,77,.06) !important;
 }
+
+/* ===== Scroll-reveal motion ===== */
+@media (prefers-reduced-motion: no-preference){
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .7s cubic-bezier(.16,.8,.3,1),transform .7s cubic-bezier(.16,.8,.3,1);will-change:opacity,transform}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  .reveal-group .reveal:nth-child(1){transition-delay:.05s}
+  .reveal-group .reveal:nth-child(2){transition-delay:.12s}
+  .reveal-group .reveal:nth-child(3){transition-delay:.19s}
+  .reveal-group .reveal:nth-child(4){transition-delay:.26s}
+  .reveal-group .reveal:nth-child(5){transition-delay:.33s}
+  .reveal-group .reveal:nth-child(6){transition-delay:.40s}
+  .reveal-group .reveal:nth-child(7){transition-delay:.47s}
+  .reveal-group .reveal:nth-child(8){transition-delay:.54s}
+}
+
+/* Hero entrance */
+@media (prefers-reduced-motion: no-preference){
+  .quote-hero-copy{animation:heroFadeUp .8s cubic-bezier(.16,.8,.3,1) both}
+  .quote-card{animation:heroFadeUp .8s cubic-bezier(.16,.8,.3,1) .15s both}
+  @keyframes heroFadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+}
+
+/* Micro-interactions */
+.btn{transition:transform .25s ease,box-shadow .25s ease,background-color .25s ease}
+.btn:hover{transform:translateY(-3px);box-shadow:0 18px 34px rgba(23,118,200,.32)}
+.btn:active{transform:translateY(0)}
+
+.service-row{transition:transform .35s ease}
+.service-icon{transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease}
+.service-row:hover{transform:translateY(-4px)}
+.service-row:hover .service-icon{transform:scale(1.1) rotate(-6deg);box-shadow:0 18px 36px rgba(23,118,200,.4)}
+.service-icon svg{transition:transform .35s ease}
+
+.portfolio-item{transition:transform .4s ease,box-shadow .4s ease}
+.portfolio-item img{transition:transform .6s ease}
+.portfolio-item:hover{transform:translateY(-6px);box-shadow:0 22px 50px rgba(11,45,77,.16)}
+.portfolio-item:hover img{transform:scale(1.06)}
+
+.carousel-btn{transition:transform .25s ease,background-color .25s ease,color .25s ease}
+.carousel-btn:hover{transform:scale(1.08);background:#1776c8;color:#fff}
+
+.county-box,.step,.city-links a,.cta-box,.contact-card{transition:transform .35s ease,box-shadow .35s ease}
+.step:hover,.county-box:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(11,45,77,.12)}
+.city-links a:hover{transform:translateY(-2px)}
+
+nav a{transition:color .25s ease}
+.nav-links a{position:relative}
+.nav-links a:not(.btn)::after{content:'';position:absolute;left:0;right:100%;bottom:-6px;height:2px;background:#1776c8;transition:right .3s ease}
+.nav-links a:not(.btn):hover::after{right:0}
