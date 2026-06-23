@@ -16,11 +16,60 @@ document.addEventListener('click', function(e){
 function slidePortfolio(direction){
   const track=document.getElementById('portfolioTrack');
   if(!track) return;
-  const first=track.querySelector('.portfolio-item');
+  const items=track.querySelectorAll('.portfolio-item');
+  const first=items[0];
   const gap=22;
   const amount=first ? first.getBoundingClientRect().width + gap : Math.round(track.clientWidth * 0.85);
-  track.scrollBy({left: direction * amount, behavior:'smooth'});
+  const maxScroll=track.scrollWidth - track.clientWidth;
+  let target=track.scrollLeft + direction * amount;
+  if(target < 4) target = direction < 0 ? maxScroll : 0;
+  else if(target > maxScroll - 4) target = direction > 0 ? 0 : maxScroll;
+  track.scrollTo({left: target, behavior:'smooth'});
 }
+
+(function(){
+  const track=document.getElementById('portfolioTrack');
+  const dotsWrap=document.getElementById('portfolioDots');
+  if(!track || !dotsWrap) return;
+  const items=Array.from(track.querySelectorAll('.portfolio-item'));
+  if(!items.length) return;
+
+  items.forEach((item, i)=>{
+    const dot=document.createElement('button');
+    dot.type='button';
+    dot.className='carousel-dot'+(i===0 ? ' active' : '');
+    dot.setAttribute('aria-label','Go to photo '+(i+1));
+    dot.addEventListener('click', ()=>{
+      track.scrollTo({left:item.offsetLeft - track.offsetLeft, behavior:'smooth'});
+    });
+    dotsWrap.appendChild(dot);
+  });
+  const dots=Array.from(dotsWrap.children);
+
+  function updateActiveDot(){
+    let closest=0;
+    let closestDist=Infinity;
+    items.forEach((item, i)=>{
+      const dist=Math.abs(item.offsetLeft - track.offsetLeft - track.scrollLeft);
+      if(dist < closestDist){ closestDist=dist; closest=i; }
+    });
+    dots.forEach((d, i)=>d.classList.toggle('active', i===closest));
+  }
+
+  let scrollTimer;
+  track.addEventListener('scroll', ()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(updateActiveDot, 80);
+  });
+
+  let autoplay=setInterval(()=>slidePortfolio(1), 4500);
+  function pauseAutoplay(){ clearInterval(autoplay); }
+  function resumeAutoplay(){ clearInterval(autoplay); autoplay=setInterval(()=>slidePortfolio(1), 4500); }
+  track.addEventListener('mouseenter', pauseAutoplay);
+  track.addEventListener('mouseleave', resumeAutoplay);
+  track.addEventListener('touchstart', pauseAutoplay, {passive:true});
+  track.addEventListener('touchend', resumeAutoplay);
+})();
 
 document.addEventListener('DOMContentLoaded', function(){
   const targets=document.querySelectorAll(
