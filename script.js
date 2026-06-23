@@ -20,11 +20,11 @@ function slidePortfolio(direction){
 
 document.addEventListener('DOMContentLoaded', function(){
   const targets=document.querySelectorAll(
-    '.section-head, .service-row, .portfolio-item, .about-grid > *, .step, .county-box, .cta-box, .contact-card, form:not(.quote-form), .faq-item'
+    '.section-head, .service-row, .portfolio-item, .about-grid > *, .step, .county-box, .cta-box, .contact-card, form:not(.quote-form), .faq-item, .blog-card'
   );
   targets.forEach(el=>el.classList.add('reveal'));
 
-  document.querySelectorAll('.service-menu-grid, .process-grid, .cities-list').forEach(el=>el.classList.add('reveal-group'));
+  document.querySelectorAll('.service-menu-grid, .process-grid, .cities-list, .blog-grid').forEach(el=>el.classList.add('reveal-group'));
 
   if('IntersectionObserver' in window){
     const observer=new IntersectionObserver((entries)=>{
