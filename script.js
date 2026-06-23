@@ -1,12 +1,16 @@
 
 function toggleMenu(){
   const nav=document.getElementById('navLinks');
+  const toggle=document.querySelector('.mobile-toggle');
   if(nav) nav.classList.toggle('active');
+  if(toggle) toggle.classList.toggle('active');
 }
 document.addEventListener('click', function(e){
   if(e.target.matches('.nav-links a')){
     const nav=document.getElementById('navLinks');
+    const toggle=document.querySelector('.mobile-toggle');
     if(nav) nav.classList.remove('active');
+    if(toggle) toggle.classList.remove('active');
   }
 });
 function slidePortfolio(direction){
