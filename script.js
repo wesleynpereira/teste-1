@@ -20,7 +20,7 @@ function slidePortfolio(direction){
 
 document.addEventListener('DOMContentLoaded', function(){
   const targets=document.querySelectorAll(
-    '.section-head, .service-row, .portfolio-item, .about-grid > *, .step, .county-box, .cta-box, .contact-card, form:not(.quote-form)'
+    '.section-head, .service-row, .portfolio-item, .about-grid > *, .step, .county-box, .cta-box, .contact-card, form:not(.quote-form), .faq-item'
   );
   targets.forEach(el=>el.classList.add('reveal'));
 
@@ -39,4 +39,16 @@ document.addEventListener('DOMContentLoaded', function(){
   } else {
     targets.forEach(el=>el.classList.add('visible'));
   }
+
+  document.querySelectorAll('.faq-question').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const item=btn.closest('.faq-item');
+      const isActive=item.classList.contains('active');
+      item.parentElement.querySelectorAll('.faq-item.active').forEach(function(open){
+        if(open!==item){ open.classList.remove('active'); open.querySelector('.faq-question').setAttribute('aria-expanded','false'); }
+      });
+      item.classList.toggle('active', !isActive);
+      btn.setAttribute('aria-expanded', String(!isActive));
+    });
+  });
 });
