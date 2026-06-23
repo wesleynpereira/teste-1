@@ -1,4 +1,36 @@
 
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('form.ajax-form').forEach(function(form){
+    const statusEl = form.querySelector('.form-status');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(statusEl){ statusEl.textContent = 'Sending...'; statusEl.className = 'form-status'; }
+      if(submitBtn){ submitBtn.disabled = true; }
+      fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        if(data.success){
+          if(statusEl){ statusEl.textContent = "Thanks! We'll be in touch shortly."; statusEl.className = 'form-status success'; }
+          form.reset();
+        } else {
+          if(statusEl){ statusEl.textContent = 'Something went wrong. Please call us instead.'; statusEl.className = 'form-status error'; }
+        }
+      })
+      .catch(function(){
+        if(statusEl){ statusEl.textContent = 'Something went wrong. Please call us instead.'; statusEl.className = 'form-status error'; }
+      })
+      .finally(function(){
+        if(submitBtn){ submitBtn.disabled = false; }
+      });
+    });
+  });
+});
+
 function toggleMenu(){
   const nav=document.getElementById('navLinks');
   const toggle=document.querySelector('.mobile-toggle');
