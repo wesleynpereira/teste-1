@@ -53,20 +53,73 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 
-  card.querySelectorAll('.qty-stepper').forEach(function(stepper){
-    const row = stepper.closest('.upholstery-row');
-    const valEl = stepper.querySelector('.qty-val');
-    stepper.querySelectorAll('button').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        const step = parseInt(btn.dataset.step, 10);
-        let val = parseInt(valEl.textContent, 10) || 0;
-        val = Math.max(0, val + step);
-        valEl.textContent = val;
-        row.dataset.qty = val;
-        recalc();
-      });
+  const UPHOLSTERY_ITEMS = [
+    { label: 'Armchair / Accent Chair', price: 64 },
+    { label: 'Loveseat (2-seater)', price: 114 },
+    { label: 'Sofa (3-seater)', price: 154 },
+    { label: 'Sectional / L-Shape', price: 279, approx: true },
+    { label: 'Recliner', price: 84 },
+    { label: 'Chaise Lounge', price: 104 },
+    { label: 'Ottoman', price: 30 },
+    { label: 'Dining Chair', price: 25, approx: true },
+    { label: 'Set of 4 Dining Chairs', price: 84 },
+    { label: 'Bar Stool', price: 20 },
+    { label: 'Office Chair', price: 39, approx: true },
+    { label: 'Upholstered Headboard', price: 60 }
+  ];
+
+  const uphItems = document.getElementById('uphItems');
+  const uphAddBtn = document.getElementById('uphAddBtn');
+
+  function buildUphSelect(){
+    const select = document.createElement('select');
+    select.className = 'uph-select';
+    UPHOLSTERY_ITEMS.forEach(function(item, i){
+      const opt = document.createElement('option');
+      opt.value = item.price;
+      opt.dataset.label = item.label;
+      opt.textContent = item.label + ' — ' + (item.approx ? '~' : '') + '$' + item.price;
+      if(i === 0) opt.selected = true;
+      select.appendChild(opt);
     });
-  });
+    return select;
+  }
+
+  function addUphRow(){
+    if(!uphItems) return;
+    const row = document.createElement('div');
+    row.className = 'uph-item-row';
+
+    const select = buildUphSelect();
+
+    const qty = document.createElement('input');
+    qty.type = 'number';
+    qty.className = 'uph-qty';
+    qty.value = '1';
+    qty.min = '1';
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'uph-remove';
+    removeBtn.innerHTML = '&times;';
+    removeBtn.addEventListener('click', function(){
+      row.remove();
+      recalc();
+    });
+
+    row.appendChild(select);
+    row.appendChild(qty);
+    row.appendChild(removeBtn);
+    uphItems.appendChild(row);
+
+    select.addEventListener('change', recalc);
+    qty.addEventListener('input', recalc);
+
+    recalc();
+  }
+
+  if(uphAddBtn) uphAddBtn.addEventListener('click', addUphRow);
+  if(uphItems) addUphRow();
 
   const sqftInput = document.getElementById('carpetSqft');
   if(sqftInput) sqftInput.addEventListener('input', recalc);
@@ -93,11 +146,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const items = [];
     let upholsteryTotal = 0;
-    card.querySelectorAll('.upholstery-row').forEach(function(row){
-      const qty = parseInt(row.dataset.qty, 10) || 0;
-      if(qty > 0){
-        const price = parseFloat(row.dataset.price) || 0;
-        const label = row.querySelector('span').textContent.replace(/\s*\$.*$/,'').replace(/~/,'').trim();
+    if(uphItems) uphItems.querySelectorAll('.uph-item-row').forEach(function(row){
+      const select = row.querySelector('.uph-select');
+      const qtyInput = row.querySelector('.uph-qty');
+      const qty = parseInt(qtyInput && qtyInput.value, 10) || 0;
+      if(qty > 0 && select){
+        const price = parseFloat(select.value) || 0;
+        const label = select.options[select.selectedIndex].dataset.label;
         upholsteryTotal += price * qty;
         items.push(`${qty}x ${label} ($${price} each)`);
       }
