@@ -131,3 +131,4 @@ nav a{transition:color .25s ease}
 .uph-remove:hover{background:#fdecec;border-color:#e8a2a2;color:#c0392b}
 .uph-add-btn{width:100%;border:1px dashed #1776c8;background:transparent;color:#1776c8;font-weight:800;font-size:13.5px;padding:10px;border-radius:10px;cursor:pointer;margin-bottom:6px}
 .uph-add-btn:hover{background:rgba(23,118,200,.08)}
+@media(min-width:981px){.quote-hero-copy{margin-top:-224px}}
