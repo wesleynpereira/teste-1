@@ -31,25 +31,16 @@
 
 </div>
 <div class="estimate-panel" data-panel="upholstery" hidden>
+<label class="estimate-checkbox"><input type="checkbox" id="uphInclude"> Include Upholstery Cleaning</label>
 <label>Items</label>
 <div class="uph-items" id="uphItems"></div>
 <button type="button" class="uph-add-btn" id="uphAddBtn">+ Add another item</button>
 </div>
 <div class="estimate-panel" data-panel="mattress" hidden>
 <label class="estimate-checkbox"><input type="checkbox" id="mattressInclude"> Include Mattress Cleaning</label>
-<label>Mattress Size</label>
-<select id="mattressSize">
-<option value="67">Twin / Single &mdash; $67</option>
-<option value="93">Full / Double &mdash; $93</option>
-<option value="114" selected>Queen &mdash; $114</option>
-<option value="144">King &mdash; $144</option>
-<option value="154">California King &mdash; $154</option>
-</select>
-<label>Sides</label>
-<div class="radio-row">
-<label><input type="radio" name="mattressSides" value="1" checked> One Side</label>
-<label><input type="radio" name="mattressSides" value="1.4"> Both Sides</label>
-</div>
+<label>Items</label>
+<div class="mattress-items" id="mattressItems"></div>
+<button type="button" class="uph-add-btn" id="mattressAddBtn">+ Add another item</button>
 </div>
 <div class="estimate-total"><span>Estimated Total</span><strong id="estimateTotalDisplay">$0</strong></div>
 <form class="quote-form ajax-form" id="estimateForm" name="bluepeak-estimate" action="https://api.web3forms.com/submit" method="POST"><input type="hidden" name="access_key" value="5798ac17-4f33-443b-80bb-01d60758663c"><input type="hidden" name="subject" value="New Instant Estimate Request - BluePeak"><input type="hidden" name="from_name" value="BluePeak Cleaning Co. Website"><input type="hidden" name="service" id="estimateService"><input type="hidden" name="estimate_details" id="estimateDetails"><input type="hidden" name="estimated_total" id="estimateTotalField"><label>Full Name *</label><input type="text" name="name" placeholder="Full Name" required><label>Phone *</label><input type="tel" name="phone" placeholder="Phone" required><label>Email *</label><input type="email" name="email" placeholder="Email" required><label>Zip Code *</label><input type="text" name="zip" placeholder="Zip Code" required><button class="btn quote-submit" type="submit">Send My Estimate Request</button><p class="form-status" aria-live="polite"></p><p class="estimate-disclaimer">Pricing may vary based on item condition. Our team will follow up to confirm your estimate and schedule service.</p><p class="form-disclaimer">By submitting this form, you consent to be contacted by BluePeak Cleaning Co. regarding your request. Message and data rates may apply.</p></form></aside></div></section>

@@ -124,18 +124,89 @@ document.addEventListener('DOMContentLoaded', function(){
 
   if(uphAddBtn) uphAddBtn.addEventListener('click', addUphRow);
 
+  const uphInclude = document.getElementById('uphInclude');
+  if(uphInclude) uphInclude.addEventListener('change', recalc);
+
   const sqftInput = document.getElementById('carpetSqft');
   if(sqftInput) sqftInput.addEventListener('input', recalc);
 
-  const mattressSize = document.getElementById('mattressSize');
-  if(mattressSize) mattressSize.addEventListener('change', recalc);
-  card.querySelectorAll('input[name="mattressSides"]').forEach(function(r){
-    r.addEventListener('change', recalc);
-  });
+  const MATTRESS_SIZES = [
+    { label: 'Twin / Single', price: 67 },
+    { label: 'Full / Double', price: 93 },
+    { label: 'Queen', price: 114 },
+    { label: 'King', price: 144 },
+    { label: 'California King', price: 154 }
+  ];
+  const MATTRESS_SIDES = [
+    { label: 'One Side', multiplier: 1 },
+    { label: 'Both Sides', multiplier: 1.4 }
+  ];
+
+  const mattressItems = document.getElementById('mattressItems');
+  const mattressAddBtn = document.getElementById('mattressAddBtn');
   const mattressInclude = document.getElementById('mattressInclude');
   if(mattressInclude) mattressInclude.addEventListener('change', recalc);
 
+  function buildMattressSizeSelect(){
+    const select = document.createElement('select');
+    select.className = 'uph-select';
+    MATTRESS_SIZES.forEach(function(item, i){
+      const opt = document.createElement('option');
+      opt.value = item.price;
+      opt.dataset.label = item.label;
+      opt.textContent = item.label + ' — $' + item.price;
+      if(i === 2) opt.selected = true;
+      select.appendChild(opt);
+    });
+    return select;
+  }
+
+  function buildMattressSidesSelect(){
+    const select = document.createElement('select');
+    select.className = 'uph-select';
+    MATTRESS_SIDES.forEach(function(item, i){
+      const opt = document.createElement('option');
+      opt.value = item.multiplier;
+      opt.dataset.label = item.label;
+      opt.textContent = item.label;
+      if(i === 0) opt.selected = true;
+      select.appendChild(opt);
+    });
+    return select;
+  }
+
+  function addMattressRow(){
+    if(!mattressItems) return;
+    const row = document.createElement('div');
+    row.className = 'uph-item-row';
+
+    const sizeSelect = buildMattressSizeSelect();
+    const sidesSelect = buildMattressSidesSelect();
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'uph-remove';
+    removeBtn.innerHTML = '&times;';
+    removeBtn.addEventListener('click', function(){
+      row.remove();
+      recalc();
+    });
+
+    row.appendChild(sizeSelect);
+    row.appendChild(sidesSelect);
+    row.appendChild(removeBtn);
+    mattressItems.appendChild(row);
+
+    sizeSelect.addEventListener('change', recalc);
+    sidesSelect.addEventListener('change', recalc);
+
+    recalc();
+  }
+
+  if(mattressAddBtn) mattressAddBtn.addEventListener('click', addMattressRow);
+
   if(uphItems) addUphRow();
+  if(mattressItems) addMattressRow();
 
   function recalc(){
     let total = 0;
@@ -149,34 +220,48 @@ document.addEventListener('DOMContentLoaded', function(){
       parts.push(`Carpet Cleaning - ${sqft} sq ft @ $${rate}/sq ft = $${carpetTotal.toFixed(2)}`);
     }
 
-    const items = [];
-    let upholsteryTotal = 0;
-    if(uphItems) uphItems.querySelectorAll('.uph-item-row').forEach(function(row){
-      const select = row.querySelector('.uph-select');
-      const qtyInput = row.querySelector('.uph-qty');
-      const qty = parseInt(qtyInput && qtyInput.value, 10) || 0;
-      if(qty > 0 && select){
-        const price = parseFloat(select.value) || 0;
-        const label = select.options[select.selectedIndex].dataset.label;
-        upholsteryTotal += price * qty;
-        items.push(`${qty}x ${label} ($${price} each)`);
+    const uphChecked = document.getElementById('uphInclude');
+    if(uphChecked && uphChecked.checked){
+      const items = [];
+      let upholsteryTotal = 0;
+      if(uphItems) uphItems.querySelectorAll('.uph-item-row').forEach(function(row){
+        const select = row.querySelector('.uph-select');
+        const qtyInput = row.querySelector('.uph-qty');
+        const qty = parseInt(qtyInput && qtyInput.value, 10) || 0;
+        if(qty > 0 && select){
+          const price = parseFloat(select.value) || 0;
+          const label = select.options[select.selectedIndex].dataset.label;
+          upholsteryTotal += price * qty;
+          items.push(`${qty}x ${label} ($${price} each)`);
+        }
+      });
+      if(items.length){
+        total += upholsteryTotal;
+        parts.push(`Upholstery - ${items.join(', ')} = $${upholsteryTotal.toFixed(2)}`);
       }
-    });
-    if(items.length){
-      total += upholsteryTotal;
-      parts.push(`Upholstery - ${items.join(', ')} = $${upholsteryTotal.toFixed(2)}`);
     }
 
     const mattressChecked = document.getElementById('mattressInclude');
     if(mattressChecked && mattressChecked.checked){
-      const base = parseFloat(mattressSize && mattressSize.value) || 0;
-      const sidesEl = card.querySelector('input[name="mattressSides"]:checked');
-      const multiplier = sidesEl ? parseFloat(sidesEl.value) : 1;
-      const mattressTotal = base * multiplier;
-      total += mattressTotal;
-      const sizeLabel = mattressSize ? mattressSize.options[mattressSize.selectedIndex].textContent : '';
-      const sidesLabel = multiplier > 1 ? 'Both Sides' : 'One Side';
-      parts.push(`Mattress Cleaning - ${sizeLabel} - ${sidesLabel} = $${mattressTotal.toFixed(2)}`);
+      const mattresses = [];
+      let mattressGrandTotal = 0;
+      if(mattressItems) mattressItems.querySelectorAll('.uph-item-row').forEach(function(row){
+        const selects = row.querySelectorAll('.uph-select');
+        const sizeSelect = selects[0];
+        const sidesSelect = selects[1];
+        if(!sizeSelect || !sidesSelect) return;
+        const base = parseFloat(sizeSelect.value) || 0;
+        const multiplier = parseFloat(sidesSelect.value) || 1;
+        const mattressTotal = base * multiplier;
+        mattressGrandTotal += mattressTotal;
+        const sizeLabel = sizeSelect.options[sizeSelect.selectedIndex].dataset.label;
+        const sidesLabel = sidesSelect.options[sidesSelect.selectedIndex].dataset.label;
+        mattresses.push(`${sizeLabel} - ${sidesLabel} ($${mattressTotal.toFixed(2)})`);
+      });
+      if(mattresses.length){
+        total += mattressGrandTotal;
+        parts.push(`Mattress Cleaning - ${mattresses.join(', ')} = $${mattressGrandTotal.toFixed(2)}`);
+      }
     }
 
     const details = parts.length ? parts.join(' | ') : 'No services selected yet';
