@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function(){
       const mattressTotal = base * multiplier;
       total += mattressTotal;
       const sizeLabel = mattressSize ? mattressSize.options[mattressSize.selectedIndex].textContent : '';
-      const sidesLabel = multiplier > 1 ? 'Both Sides (+40%)' : 'One Side';
+      const sidesLabel = multiplier > 1 ? 'Both Sides' : 'One Side';
       parts.push(`Mattress Cleaning - ${sizeLabel} - ${sidesLabel} = $${mattressTotal.toFixed(2)}`);
     }
 
