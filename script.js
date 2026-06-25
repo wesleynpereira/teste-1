@@ -119,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   if(uphAddBtn) uphAddBtn.addEventListener('click', addUphRow);
-  if(uphItems) addUphRow();
 
   const sqftInput = document.getElementById('carpetSqft');
   if(sqftInput) sqftInput.addEventListener('input', recalc);
@@ -131,6 +130,8 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   const mattressInclude = document.getElementById('mattressInclude');
   if(mattressInclude) mattressInclude.addEventListener('change', recalc);
+
+  if(uphItems) addUphRow();
 
   function recalc(){
     let total = 0;
