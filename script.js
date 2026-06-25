@@ -91,6 +91,10 @@ document.addEventListener('DOMContentLoaded', function(){
     row.className = 'uph-item-row';
 
     const select = buildUphSelect();
+    select.title = select.options[select.selectedIndex].textContent;
+    select.addEventListener('change', function(){
+      select.title = select.options[select.selectedIndex].textContent;
+    });
 
     const qty = document.createElement('input');
     qty.type = 'number';
