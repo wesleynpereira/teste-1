@@ -31,6 +31,92 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 
+(function(){
+  const card = document.getElementById('quote-form');
+  if(!card) return;
+  const tabs = card.querySelectorAll('.estimate-tab');
+  const panels = card.querySelectorAll('.estimate-panel');
+  const totalDisplay = document.getElementById('estimateTotalDisplay');
+  const serviceField = document.getElementById('estimateService');
+  const detailsField = document.getElementById('estimateDetails');
+  const totalField = document.getElementById('estimateTotalField');
+  if(!tabs.length) return;
+
+  let activeTab = 'carpet';
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      activeTab = tab.dataset.tab;
+      tabs.forEach(function(t){ t.classList.toggle('active', t === tab); });
+      panels.forEach(function(p){ p.hidden = (p.dataset.panel !== activeTab); });
+      recalc();
+    });
+  });
+
+  card.querySelectorAll('.qty-stepper').forEach(function(stepper){
+    const row = stepper.closest('.upholstery-row');
+    const valEl = stepper.querySelector('.qty-val');
+    stepper.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const step = parseInt(btn.dataset.step, 10);
+        let val = parseInt(valEl.textContent, 10) || 0;
+        val = Math.max(0, val + step);
+        valEl.textContent = val;
+        row.dataset.qty = val;
+        recalc();
+      });
+    });
+  });
+
+  const sqftInput = document.getElementById('carpetSqft');
+  if(sqftInput) sqftInput.addEventListener('input', recalc);
+
+  const mattressSize = document.getElementById('mattressSize');
+  if(mattressSize) mattressSize.addEventListener('change', recalc);
+  card.querySelectorAll('input[name="mattressSides"]').forEach(function(r){
+    r.addEventListener('change', recalc);
+  });
+
+  function recalc(){
+    let total = 0;
+    let details = '';
+
+    if(activeTab === 'carpet'){
+      const sqft = parseFloat(sqftInput && sqftInput.value) || 0;
+      const rate = sqft >= 500 ? 0.38 : 0.45;
+      total = sqft > 0 ? Math.max(sqft * rate, 134) : 0;
+      details = sqft > 0 ? `Carpet Cleaning - ${sqft} sq ft @ $${rate}/sq ft` : 'Carpet Cleaning - no square footage entered';
+    } else if(activeTab === 'upholstery'){
+      const items = [];
+      card.querySelectorAll('.upholstery-row').forEach(function(row){
+        const qty = parseInt(row.dataset.qty, 10) || 0;
+        if(qty > 0){
+          const price = parseFloat(row.dataset.price) || 0;
+          const label = row.querySelector('span').textContent.replace(/\s*\$.*$/,'').replace(/~/,'').trim();
+          total += price * qty;
+          items.push(`${qty}x ${label} ($${price} each)`);
+        }
+      });
+      details = items.length ? 'Upholstery - ' + items.join(', ') : 'Upholstery - no items selected';
+    } else if(activeTab === 'mattress'){
+      const base = parseFloat(mattressSize && mattressSize.value) || 0;
+      const sidesEl = card.querySelector('input[name="mattressSides"]:checked');
+      const multiplier = sidesEl ? parseFloat(sidesEl.value) : 1;
+      total = base * multiplier;
+      const sizeLabel = mattressSize ? mattressSize.options[mattressSize.selectedIndex].textContent : '';
+      const sidesLabel = multiplier > 1 ? 'Both Sides (+40%)' : 'One Side';
+      details = `Mattress Cleaning - ${sizeLabel} - ${sidesLabel}`;
+    }
+
+    if(totalDisplay) totalDisplay.textContent = '$' + total.toFixed(2).replace(/\.00$/, '');
+    if(serviceField) serviceField.value = activeTab;
+    if(detailsField) detailsField.value = details;
+    if(totalField) totalField.value = '$' + total.toFixed(2);
+  }
+
+  recalc();
+})();
+
 function toggleMenu(){
   const nav=document.getElementById('navLinks');
   const toggle=document.querySelector('.mobile-toggle');
